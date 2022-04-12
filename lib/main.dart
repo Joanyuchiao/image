@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:photo_view/photo_view_gallery.dart';
 
 void main() => runApp(MyApp());
 
@@ -48,22 +50,18 @@ class MyHomePage extends StatelessWidget {
     );
 
     final widget = Center(
-      child: Column(
-        children: <Widget>[
-          Container(
-            child: imgBrowser,
-            margin: EdgeInsets.symmetric(vertical: 10),
+      child: Stack(children: <Widget>[
+        Container(
+          child: imgBrowser,
+        ),
+        Container(
+          child: Row(
+            children: <Widget>[previousBtn, nextBtn],
+            mainAxisAlignment: MainAxisAlignment.center,
           ),
-          Container(
-            child: Row(
-              children: <Widget>[previousBtn, nextBtn],
-              mainAxisAlignment: MainAxisAlignment.center,
-            ),
-            margin: EdgeInsets.symmetric(vertical: 10),
-          ),
-        ],
-        mainAxisAlignment: MainAxisAlignment.center,
-      ),
+          margin: EdgeInsets.symmetric(vertical: 10),
+        ),
+      ], alignment: Alignment.topCenter),
     );
 
     // 結合AppBar和App操作畫面
@@ -75,6 +73,7 @@ class MyHomePage extends StatelessWidget {
     return appHomePage;
   }
 }
+
 
 class _ImageBrowser extends StatefulWidget {
   final GlobalKey<_ImageBrowserState> _key;
@@ -95,7 +94,14 @@ class _ImageBrowser extends StatefulWidget {
 class _ImageBrowserState extends State<_ImageBrowser> {
   @override
   Widget build(BuildContext context) {
-    Image img = Image.asset(widget._images[widget._imageIndex]);
+    var img = PhotoView(
+        imageProvider: AssetImage(widget._images[widget._imageIndex]),
+        minScale: PhotoViewComputedScale.contained * 0.6,
+        maxScale: PhotoViewComputedScale.covered,
+        enableRotation: null,
+        backgroundDecoration: BoxDecoration(
+          color: Colors.amber,
+        ));
     return img;
   }
 
